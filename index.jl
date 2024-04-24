@@ -28,7 +28,7 @@ end
 
 # ╔═╡ 2fe59b4a-3bd4-4466-83ff-aa97a887b1b3
 md"""
-# Taking gradients of computer programs
+# A primer on algorithmic differentiation
 """
 
 # ╔═╡ fe638244-3f35-4de4-a52e-aa6ef8b662ef
@@ -44,16 +44,21 @@ md"""
 TwoColumn(present_button(), ChooseDisplayMode())
 
 # ╔═╡ cbf0a7eb-0750-4537-b925-efd743360979
-TableOfContents()
+TableOfContents(depth=2)
 
 # ╔═╡ 603d7e48-3def-44f8-882e-74e3f22293c0
 md"""
 # Differentiable programming
 """
 
+# ╔═╡ fdb8ed44-74dd-4cdf-8d3d-c4d8bf467fc4
+md"""
+## In theory
+"""
+
 # ╔═╡ 317749dd-fd49-488b-ad0d-9d30b33d9891
 md"""
-## Definition
+### Definition
 
 _**Differentiable programming** is a programming paradigm in which complex computer programs (including those with control flows and data structures) can be **differentiated end-to-end automatically**, enabling gradient-based optimization of parameters in the program.
 In differentiable programming, a program is also defined as the composition of elementary operations, forming a **computation graph**._
@@ -63,15 +68,20 @@ Blondel and Roulet (2024)
 
 # ╔═╡ 7b023270-9b2d-4d69-93dc-921e37fcf423
 md"""
-## Computation graphs
+### Computation graphs
 """
 
 # ╔═╡ ff41d45f-12d8-41de-bf19-e290a0590098
 LocalResource("images/dag.png")  # source: "The Elements of Differentiable Programming"
 
+# ╔═╡ b7227f5c-bf16-460d-b2f2-6938a2ca8261
+md"""
+## In practice
+"""
+
 # ╔═╡ 7b64bd44-f261-49b6-8520-ec09135305d3
 md"""
-## Applications
+### Applications
 """
 
 # ╔═╡ 52de1ea5-e8f0-4efb-a752-fdddf29ff462
@@ -83,12 +93,7 @@ md"""
 
 # ╔═╡ 5dda51ca-cf43-4ff5-931c-258ed1268a4e
 md"""
-## Implementations
-"""
-
-# ╔═╡ acbd09a5-d2c6-4c06-b4f0-911d6095f18f
-md"""
-### Python
+### Python implementations
 """
 
 # ╔═╡ 61d3efb7-39e8-4c4b-ad8b-fd3920e8457c
@@ -102,7 +107,7 @@ Choose AD first, write code second.
 
 # ╔═╡ 5198f895-9bf4-4f5c-ad56-109f856f4f06
 md"""
-### Julia
+### Julia implementations
 """
 
 # ╔═╡ 07cb8a3f-2627-47ad-bccc-abf06b994787
@@ -116,7 +121,7 @@ Unification and comparison attempt: my project [DifferentiationInterface.jl](htt
 
 # ╔═╡ ebf1147e-4469-4b22-99d2-003c3d597890
 md"""
-## Sources
+## References
 """
 
 # ╔═╡ a2030c95-7ed4-4690-9a22-3935f7f7ab47
@@ -130,7 +135,7 @@ md"""
 
 # ╔═╡ 1298e858-8586-4589-b853-c7165a5326ed
 md"""
-# The four horsemen of differentiation
+# The 4 horsemen of differentiation
 """
 
 # ╔═╡ 2d48dff9-cf14-4ede-9340-8c2d813ef8b8
@@ -217,7 +222,7 @@ md"""
 
 # ╔═╡ fb66a558-d4fe-41bc-a146-e71da8574f4f
 md"""
-# Principles of algorithmic differentiation
+# Forward and reverse mode
 """
 
 # ╔═╡ fb641d47-2377-4d48-8723-8026f9ab8702
@@ -411,7 +416,7 @@ The gradient of a vector-to-scalar function is a VJP applied to the output sensi
 
 # ╔═╡ 05a2f30f-a9c9-49dd-80e3-9d18a1835e97
 md"""
-# More complex operators
+# Clever combinations
 """
 
 # ╔═╡ 0a53e623-8c15-44f0-947a-76438e7ef5b7
@@ -597,7 +602,7 @@ Exact and approximate algorithms for differentiating through funky stuff.
 
 # ╔═╡ b665de9e-07a7-4d6c-bac6-707d3d90b9ef
 md"""
-## Optimization
+## Optimization problems
 """
 
 # ╔═╡ 27f93503-b82f-45a0-834d-7004b21282b7
@@ -605,6 +610,11 @@ md"""
 > [OptNet: Differentiable Optimization as a Layer in Neural Networks](https://proceedings.mlr.press/v70/amos17a.html), Amos and Kolter (2017)
 >
 > [Efficient and modular implicit differentiation](https://proceedings.neurips.cc/paper_files/paper/2022/hash/228b9279ecf9bbafe582406850c57115-Abstract-Conference.html), Blondel et al. (2022)
+"""
+
+# ╔═╡ 4612b4a2-727c-44d9-b576-b284d7c30eec
+md"""
+Value and solution of a strongly convex optimization problem are smooth functions of its parameters.
 """
 
 # ╔═╡ aeaaa6aa-cd58-410d-8ef2-4b36c3ae28ee
@@ -615,13 +625,13 @@ md"""
 # ╔═╡ a6a9fea0-adfa-41e0-8f27-37e53f51ea65
 md"""
 ```math
-m^\star(x) = \max_y f(x, y)
+m^\star(x) = \max_y g(x, y)
 ```
 
-Exchange $\nabla$ and $\max$ using convexity and Danskin's / Rockafellar's theorem
+Exchange $\nabla$ and $\max$ using Danskin's / Rockafellar's theorem
 
 ```math
-\nabla m^\star(x) = \nabla_2 f(x, y^\star(x)) \quad \text{with} \quad y^\star(x) = \arg \max_y f(x, y)
+\nabla m^\star(x) = \nabla_2 g(x, y^\star(x)) \quad \text{with} \quad y^\star(x) = \arg \max_y g(x, y)
 ```
 """
 
@@ -633,7 +643,7 @@ md"""
 # ╔═╡ d8d4cc2a-1fcd-4c59-82f7-d72c2db02596
 md"""
 ```math
-	y^\star(x) = \arg \max_y f(x, y)
+	y^\star(x) = \arg \max_y g(x, y)
 ```
 Use the implicit function theorem with the optimality conditions $c(x, y^\star(x)) = 0$, then solve a linear system:
 ```math
@@ -641,13 +651,13 @@ Use the implicit function theorem with the optimality conditions $c(x, y^\star(x
 ```
 What kind of optimality conditions?
 
-- Unconstrained: gradient is zero
+- Unconstrained: gradient is zero $c(x, y) = \nabla_2 g(x, y)$
 - Constrained: KKT, projected gradient
 """
 
 # ╔═╡ f2ff2731-77ca-456e-b5ca-74f2d4ea74aa
 md"""
-## Expectation
+## Expectations
 """
 
 # ╔═╡ 2684079a-ea96-4c55-b565-390a0b6d2de0
@@ -657,8 +667,13 @@ md"""
 
 # ╔═╡ d4799108-9061-45af-b238-6a0a945082f8
 md"""
+Expectations of parametric distributions
 ```math
-F(x) = \mathbb{E}_{p_x}[Y] = \int_y y \, p_x(y) \, \mathrm{d}y
+f(x) = \mathbb{E}_{Y \sim p_x}[g(Y)] = \int g(y) \, p_x(y) \, \mathrm{d}y
+```
+are usually approximated by Monte-Carlo
+```math
+\widehat{f}_K(x) = \frac{1}{K} \sum_{k=1}^K g(y_k) \quad \text{with} \quad y_k \overset{\text{iid}}{\sim} p_x
 ```
 """
 
@@ -667,9 +682,86 @@ md"""
 ### REINFORCE / score function
 """
 
+# ╔═╡ e2e55824-657d-43fb-839a-3181656620e5
+md"""
+Exchange $\nabla$ and $\int$, then use the logarithmic identity $\nabla_x \log p_x(y) = \frac{\nabla_x p_x(y)}{p_x(y)}$ to recover an expectation:
+```math
+\begin{align*}
+\nabla f(x) & = \int g(y) \, \nabla_x p_x(y) \, \mathrm{d}y\\
+& = \int g(y) \, p_x(y) \, \nabla_x \log p_x(y) \, \mathrm{d}y \\
+& = \mathbb{E}_{Y \sim p_x} [g(Y) \nabla_x \log p_x(Y)]
+\end{align*}
+```
+Monte-Carlo gradient estimate:
+```math
+\widehat{\nabla f}_K(x) = \frac{1}{K} \sum_{k=1}^K g(y_k) \nabla_x \log p_x(y_k)
+```
+"""
+
+# ╔═╡ 86444d3c-3712-4c23-bfcd-b9553bc714f1
+TwoColumn(
+	md"""
+Upsides:
+- works with any $g$ and $p_x$
+	""",
+	md"""
+Downsides:
+- high variance
+	"""
+)
+
 # ╔═╡ 616fe6e8-e4b8-48fb-ae3c-65c2b28106de
 md"""
-### Reparametrization
+### Reparametrization / pathwise
+"""
+
+# ╔═╡ 24972121-e793-402e-9719-c3784711a4c3
+md"""
+If possible, express $Y \sim p_x$ as $Y = h(x, Z)$ with $Z \sim q$ indep from $x$:
+```math
+\begin{align*}
+f(x) & = \int g(h(x, z)) \, q(z) \, \mathrm{d}z \\
+\nabla f(x) &= \int (\partial_1 h(x, z))^\top \nabla g(h(x, z)) \, q(z) \, \mathrm{d}z
+\\
+& = \mathbb{E}_{Z \sim q} \left[ (\partial_1 h(x, Z))^\top \nabla g(h(x, Z)) \right]
+\end{align*} 
+```
+Monte-Carlo gradient estimate:
+```math
+\widehat{\nabla f}_K(x) = \frac{1}{K} \sum_{k=1}^K (\partial_1 h(x, z_k))^\top \nabla g(h(x, z_k)) \quad \text{with} \quad z_k \overset{\text{iid}}{\sim} q
+```
+"""
+
+# ╔═╡ 749cec74-b9a9-41ca-a048-e19cb241b492
+TwoColumn(
+	md"""
+Upsides:
+- low variance
+	""",
+	md"""
+Downsides:
+- reparametrization not always possible
+- requires $g$ differentiable
+	"""
+)
+
+# ╔═╡ e964923b-870b-4b88-a22d-d81af6caf385
+md"""
+### Stochastic programs
+"""
+
+# ╔═╡ d3809b7f-c832-4109-a2f6-7878d73115ed
+md"""
+> [Gradient Estimation Using Stochastic Computation Graphs](https://proceedings.neurips.cc/paper_files/paper/2015/hash/de03beffeed9da5f3639a621bcab5dd4-Abstract.html), Schulman et al. (2015)
+"""
+
+# ╔═╡ ef2d3e57-ac3b-4b5e-a063-3eff1fdf11be
+md"""
+What happens when the function can return a random result?
+
+Different from expectations which are deterministic
+
+Requires generalizing computation graphs with "stochastic nodes"
 """
 
 # ╔═╡ b01724db-42fd-4ebb-9d67-74d7a19bf36c
@@ -682,6 +774,17 @@ md"""
 ### Control flow
 """
 
+# ╔═╡ 4e7873ed-0ddd-4b7b-8acc-2d55be3257bc
+md"""
+Algorithmic differentiation takes the derivative for the specific control flow of the forward sweep:
+
+- same `if/else` branching
+- same number of iterations in `while` loop
+- etc.
+
+We can also define continuous relaxations of the control flow, e.g. by taking each branch with a nonzero probability.
+"""
+
 # ╔═╡ 0b520f07-8b7a-443f-9044-6dd727701c42
 md"""
 ### Combinatorial solvers
@@ -692,14 +795,39 @@ md"""
 > [Decision-Focused Learning: Foundations, State of the Art, Benchmark and Future Opportunities](https://arxiv.org/abs/2307.13565), Mandi et al. (2023)
 """
 
-# ╔═╡ e964923b-870b-4b88-a22d-d81af6caf385
+# ╔═╡ c6c58d3c-5346-485b-9d3e-0b1a46d8733b
 md"""
-## Stochastic programs
+An integer linear program is a piecewise-constant mapping from objective to solution:
+```math
+y^\star(x) = \arg \max_{y \in \mathbb{Z}} x^\top y \quad \text{s.t.} \quad Ax \leq b
+```
+Its derivatives contain no information, but we may want to use it within a deep learning pipeline.
 """
 
-# ╔═╡ d3809b7f-c832-4109-a2f6-7878d73115ed
+# ╔═╡ 88d8c6fd-fe08-45f4-ad3a-55af8e9131f5
 md"""
-> [Gradient Estimation Using Stochastic Computation Graphs](https://proceedings.neurips.cc/paper_files/paper/2015/hash/de03beffeed9da5f3639a621bcab5dd4-Abstract.html), Schulman et al. (2015)
+### Regularization
+"""
+
+# ╔═╡ 5113cb7c-ff61-4b06-9561-d464aadd26f2
+md"""
+Apply implicit differentiation to a convex regularized version of the problem:
+```math
+\widehat{y^\star_R}(x) = \arg \max_{y \in \mathbb{R}} (x^\top y - R(y)) \quad \text{s.t.} \quad Ax \leq b
+```
+"""
+
+# ╔═╡ b9853f7f-fdbd-401c-b95d-7947042d5f14
+md"""
+### Perturbation
+"""
+
+# ╔═╡ 7cb40b09-7dfc-4ab5-988e-f7d903c6d0d4
+md"""
+Apply REINFORCE to a randomly perturbed version of the problem:
+```math
+\widehat{y^\star_\varepsilon}(x) = \mathbb{E}\left[\arg \max_{y \in \mathbb{Z}} (x + \varepsilon Z)^\top y \quad \text{s.t.} \quad Ax \leq b\right] \quad \text{where} \quad Z \sim \mathcal{N}(0, \varepsilon^2)
+```
 """
 
 # ╔═╡ f6f4191f-faf6-407c-9c65-b5fd24547296
@@ -709,7 +837,7 @@ md"""
 
 # ╔═╡ 77063fdb-c980-4f09-b34f-f64b79ac6782
 md"""
-[Enzyme](https://github.com/EnzymeAD/enzyme): compile, optimize and then differentiate
+[Enzyme](https://github.com/EnzymeAD/enzyme): lower, optimize and then differentiate
 """
 
 # ╔═╡ c24656e1-b5df-4eb0-b5e9-a28d50ea3bb1
@@ -2749,13 +2877,14 @@ version = "3.5.0+0"
 # ╠═028bee0c-00d6-11ef-2159-99ffeebdeba2
 # ╠═cbf0a7eb-0750-4537-b925-efd743360979
 # ╟─603d7e48-3def-44f8-882e-74e3f22293c0
+# ╟─fdb8ed44-74dd-4cdf-8d3d-c4d8bf467fc4
 # ╟─317749dd-fd49-488b-ad0d-9d30b33d9891
 # ╟─7b023270-9b2d-4d69-93dc-921e37fcf423
 # ╠═ff41d45f-12d8-41de-bf19-e290a0590098
+# ╟─b7227f5c-bf16-460d-b2f2-6938a2ca8261
 # ╟─7b64bd44-f261-49b6-8520-ec09135305d3
 # ╟─52de1ea5-e8f0-4efb-a752-fdddf29ff462
 # ╟─5dda51ca-cf43-4ff5-931c-258ed1268a4e
-# ╟─acbd09a5-d2c6-4c06-b4f0-911d6095f18f
 # ╟─61d3efb7-39e8-4c4b-ad8b-fd3920e8457c
 # ╟─5198f895-9bf4-4f5c-ad56-109f856f4f06
 # ╟─07cb8a3f-2627-47ad-bccc-abf06b994787
@@ -2840,6 +2969,7 @@ version = "3.5.0+0"
 # ╟─5106f29b-2b58-41b7-9e90-9dbd09cfcff8
 # ╟─b665de9e-07a7-4d6c-bac6-707d3d90b9ef
 # ╟─27f93503-b82f-45a0-834d-7004b21282b7
+# ╟─4612b4a2-727c-44d9-b576-b284d7c30eec
 # ╟─aeaaa6aa-cd58-410d-8ef2-4b36c3ae28ee
 # ╟─a6a9fea0-adfa-41e0-8f27-37e53f51ea65
 # ╟─8b1ae57b-acc9-4d32-9e19-93b2049a9cf7
@@ -2848,13 +2978,24 @@ version = "3.5.0+0"
 # ╟─2684079a-ea96-4c55-b565-390a0b6d2de0
 # ╟─d4799108-9061-45af-b238-6a0a945082f8
 # ╟─4821a3a6-8178-4d1d-bf2e-d9f45ced4715
+# ╟─e2e55824-657d-43fb-839a-3181656620e5
+# ╟─86444d3c-3712-4c23-bfcd-b9553bc714f1
 # ╟─616fe6e8-e4b8-48fb-ae3c-65c2b28106de
-# ╟─b01724db-42fd-4ebb-9d67-74d7a19bf36c
-# ╟─4b4d5e05-22ec-4093-9dfd-b5cc7191540a
-# ╟─0b520f07-8b7a-443f-9044-6dd727701c42
-# ╟─d49a9db0-2154-4a3e-8359-195830286324
+# ╟─24972121-e793-402e-9719-c3784711a4c3
+# ╟─749cec74-b9a9-41ca-a048-e19cb241b492
 # ╟─e964923b-870b-4b88-a22d-d81af6caf385
 # ╟─d3809b7f-c832-4109-a2f6-7878d73115ed
+# ╟─ef2d3e57-ac3b-4b5e-a063-3eff1fdf11be
+# ╟─b01724db-42fd-4ebb-9d67-74d7a19bf36c
+# ╟─4b4d5e05-22ec-4093-9dfd-b5cc7191540a
+# ╟─4e7873ed-0ddd-4b7b-8acc-2d55be3257bc
+# ╟─0b520f07-8b7a-443f-9044-6dd727701c42
+# ╟─d49a9db0-2154-4a3e-8359-195830286324
+# ╟─c6c58d3c-5346-485b-9d3e-0b1a46d8733b
+# ╟─88d8c6fd-fe08-45f4-ad3a-55af8e9131f5
+# ╟─5113cb7c-ff61-4b06-9561-d464aadd26f2
+# ╟─b9853f7f-fdbd-401c-b95d-7947042d5f14
+# ╟─7cb40b09-7dfc-4ab5-988e-f7d903c6d0d4
 # ╟─f6f4191f-faf6-407c-9c65-b5fd24547296
 # ╟─77063fdb-c980-4f09-b34f-f64b79ac6782
 # ╠═c24656e1-b5df-4eb0-b5e9-a28d50ea3bb1
