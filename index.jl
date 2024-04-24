@@ -21,12 +21,10 @@ begin
 	using LinearAlgebra
 	using PlutoTeachingTools
 	using PlutoUI
+	using SparseArrays
 	import Symbolics
 	import Zygote
 end
-
-# ╔═╡ cbf0a7eb-0750-4537-b925-efd743360979
-TableOfContents()
 
 # ╔═╡ 2fe59b4a-3bd4-4466-83ff-aa97a887b1b3
 md"""
@@ -34,14 +32,19 @@ md"""
 """
 
 # ╔═╡ fe638244-3f35-4de4-a52e-aa6ef8b662ef
-md"""
-Guillaume Dalle
+TwoColumn(md"**Guillaume Dalle**", md"INDY Lab, 2024.04.27")
 
-INDY lab, 2024.04.27
+# ╔═╡ d98a6acc-8cb9-4ec3-beb2-c12655f0bd72
+md"""
+!!! tip "Link to the notebook"
+	<https://gdalle.github.io/AutodiffTutorial/>
 """
 
 # ╔═╡ 824423d7-21b0-4b48-9200-22d213207fe0
 TwoColumn(present_button(), ChooseDisplayMode())
+
+# ╔═╡ cbf0a7eb-0750-4537-b925-efd743360979
+TableOfContents()
 
 # ╔═╡ 603d7e48-3def-44f8-882e-74e3f22293c0
 md"""
@@ -64,7 +67,7 @@ md"""
 """
 
 # ╔═╡ ff41d45f-12d8-41de-bf19-e290a0590098
-LocalResource("images/dag.png")
+LocalResource("images/dag.png")  # source: "The Elements of Differentiable Programming"
 
 # ╔═╡ 7b64bd44-f261-49b6-8520-ec09135305d3
 md"""
@@ -78,6 +81,39 @@ md"""
 - Scientific computing
 """
 
+# ╔═╡ 5dda51ca-cf43-4ff5-931c-258ed1268a4e
+md"""
+## Implementations
+"""
+
+# ╔═╡ acbd09a5-d2c6-4c06-b4f0-911d6095f18f
+md"""
+### Python
+"""
+
+# ╔═╡ 61d3efb7-39e8-4c4b-ad8b-fd3920e8457c
+md"""
+Choose AD first, write code second.
+
+- [JAX](https://github.com/google/jax)
+- [PyTorch](https://github.com/pytorch/pytorch)
+- [TensorFlow](https://github.com/tensorflow)
+"""
+
+# ╔═╡ 5198f895-9bf4-4f5c-ad56-109f856f4f06
+md"""
+### Julia
+"""
+
+# ╔═╡ 07cb8a3f-2627-47ad-bccc-abf06b994787
+md"""
+Write code first, choose AD second (and maybe adapt code).
+
+Many different options, see [juliadiff.org](https://juliadiff.org/) for a list
+
+Unification and comparison attempt: my project [DifferentiationInterface.jl](https://github.com/gdalle/DifferentiationInterface.jl)
+"""
+
 # ╔═╡ ebf1147e-4469-4b22-99d2-003c3d597890
 md"""
 ## Sources
@@ -85,9 +121,11 @@ md"""
 
 # ╔═╡ a2030c95-7ed4-4690-9a22-3935f7f7ab47
 md"""
-> - [The Elements of Differentiable Programming](https://arxiv.org/abs/2403.14606), Blondel and Roulet (2024), where the figures come from
-> - [Automatic Differentiation in Machine Learning: A Survey](http://jmlr.org/papers/v18/17-468.html), Baydin et al. (2018)
-> - [Evaluating derivatives: principles and techniques of algorithmic differentiation](https://epubs.siam.org/doi/book/10.1137/1.9780898717761), Griewank and Walther (2008)
+> [The Elements of Differentiable Programming](https://arxiv.org/abs/2403.14606), Blondel and Roulet (2024)
+>
+> [Automatic Differentiation in Machine Learning: A Survey](http://jmlr.org/papers/v18/17-468.html), Baydin et al. (2018)
+>
+> [Evaluating derivatives: principles and techniques of algorithmic differentiation](https://epubs.siam.org/doi/book/10.1137/1.9780898717761), Griewank and Walther (2008)
 """
 
 # ╔═╡ 1298e858-8586-4589-b853-c7165a5326ed
@@ -169,7 +207,7 @@ md"""
 
 # ╔═╡ 50e1e9f5-b263-4a35-b5a1-5b6bcdf2ddad
 md"""
-Faster than symbolic
+Faster than symbolic, more precise than numerical
 """
 
 # ╔═╡ de1424c4-ebac-4155-b6d2-489c9724245f
@@ -177,14 +215,19 @@ md"""
  $L =$ $(@bind L_slider2 PlutoUI.Slider(0:100:10^4; show_value=true))
 """
 
-# ╔═╡ f0525c55-e1c4-4a11-90d1-1da7f3e4e4bd
-md"""
-More precise than numerical
-"""
-
 # ╔═╡ fb66a558-d4fe-41bc-a146-e71da8574f4f
 md"""
-# Forward and reverse mode
+# Principles of algorithmic differentiation
+"""
+
+# ╔═╡ fb641d47-2377-4d48-8723-8026f9ab8702
+md"""
+## Jacobians
+"""
+
+# ╔═╡ 201f3e38-37d2-4d7b-9e22-62f2ae7916a0
+md"""
+### Chain rule
 """
 
 # ╔═╡ 2365e621-11a1-4945-b7c6-b82e09cf2400
@@ -201,27 +244,49 @@ Its Jacobian matrix is a product, given by the chain rule
 ```math
 J = J_L J_{L-1} \cdots J_2 J_1 \quad \text{with} \quad J_\ell = \partial f_\ell [(f_{\ell-1} \circ \dots \circ f_1)(x)] 
 ```
+Do we need to compute full Jacobians to compose functions?
 """
 
 # ╔═╡ 10f7588c-7bc3-4b83-a191-def09a937edd
 md"""
-## Jacobians as linear maps
+### From matrices to linear maps
 """
 
 # ╔═╡ eee51fe7-10c0-45ed-b2bf-35a4e10bb624
 md"""
-No need to compute full Jacobians to compose functions!
+Consider Jacobians as linear maps instead:
 
-Consider them as linear maps instead (JVPs or VJPs):
-
+- generalizes to arbitrary inputs / outputs (e.g. manifolds and their tangent spaces)
 - more efficient in high dimension
-- generalizes to more complex inputs / outputs in arbitrary spaces (manifolds)
 - sufficient to solve linear systems $Ju = b$ thanks to iterative methods (like GMRES)
+
+The maps we need are:
+
+- **Jacobian-vector product (JVP)** or pushforward: $u \in \mathbb{R}^{n_{\text{in}}} \mapsto Ju \in \mathbb{R}^{n_{\text{out}}}$
+- **Vector-Jacobian product (VJP)** or pullback: $v \in \mathbb{R}^{n_{\text{out}}} \mapsto v^\top J = J^\top v \in \mathbb{R}^{n_{\text{in}}}$
+
+"""
+
+# ╔═╡ 5e9bf404-d276-486a-bad1-07318b7478d2
+md"""
+### From linear maps back to matrices
+"""
+
+# ╔═╡ 097a0c8a-1404-4c85-ae92-1b67b9c13d4e
+md"""
+The Jacobian of a vector-to-vector function can be filled
+  - column by column from $n_\text{in}$ JVPs, one per input basis vector $e_j$
+  - row by row from $n_\text{out}$ VJPs, one per output basis vector $e_i$
+"""
+
+# ╔═╡ 06dc252d-2e83-4af5-a215-258b6709f9cf
+md"""
+## Forward mode
 """
 
 # ╔═╡ 7d09d62e-8e97-4891-8628-e7a64b0b4dda
 md"""
-## Jacobian-vector product (JVP)
+### Jacobian-vector product (JVP)
 """
 
 # ╔═╡ f89d60cd-c59d-40c2-8531-d900f92c42d8
@@ -236,11 +301,11 @@ In forward mode AD, the complexity of a JVP is proportional to the complexity of
 """
 
 # ╔═╡ b8f2c1bf-fb99-457a-aac1-479b9c583351
-LocalResource("images/forward.png")
+LocalResource("images/forward.png")  # source: "The Elements of Differentiable Programming"
 
 # ╔═╡ 5e3be8e6-611e-428c-bcc6-0da0ecdd5368
 md"""
-## Forward mode implementation
+### JVP implementation
 """
 
 # ╔═╡ 372b4a11-9056-4381-9758-c0ca0d5a3ff4
@@ -278,6 +343,177 @@ Base.:*(x1::Dual, x2::Dual) = Dual(
 	x1.der * x2.val + x1.val * x2.der
 )
 
+# ╔═╡ b335cff4-54b6-4a10-bc75-cbb438ef5a64
+dual_der(f, x0) = f(Dual(x0, one(x0))).der
+
+# ╔═╡ dbe28614-186f-4a27-a36c-c94cfdfbc21a
+md"""
+### Derivatives
+"""
+
+# ╔═╡ 1c5ab740-dfb9-4ae4-94f2-6292202af7c8
+md"""
+The derivative of a scalar-to-vector function is a JVP applied to the input perturbation $u = [1]$ (efficient in forward mode)
+"""
+
+# ╔═╡ c96b3724-3c14-44fe-ab4d-aff5a0a29aa4
+md"""
+## Reverse mode
+"""
+
+# ╔═╡ 5a2f938e-604f-48c9-87e4-3e0a6ce8e974
+md"""
+### Vector-Jacobian product (VJP)
+"""
+
+# ╔═╡ 3685e527-d812-40b1-aa0e-e608818efac9
+md"""
+An output sensitivity $v \in \mathbb{R}^{n_\text{out}}$ can be propagated in the reverse direction ($L$ to $1$, right to left):
+```math
+v^\top J = (((v^\top J_L)J_{L-1}) \dots J_2)J_1
+```
+All we need is a VJP operator $v \mapsto v^\top J_\ell$ for each layer $f_\ell$.
+
+In reverse mode AD, the complexity of a VJP is proportional to the complexity of one call to $f$.
+"""
+
+# ╔═╡ 63eeecbc-2e65-4993-ba61-7cd97bfd31eb
+LocalResource("images/reverse.png")  # source: "The Elements of Differentiable Programming"
+
+# ╔═╡ b851c800-0435-4d0f-a6dd-f49db8405293
+md"""
+### VJP implementation
+"""
+
+# ╔═╡ d57af4b9-fef0-4ca5-8c9e-c0c160f718c4
+md"""
+Much more complicated than forward mode due to memory requirements:
+
+1. Run a forward sweep and record everything that happened on a tape
+2. Run a reverse sweep to compute the VJP
+"""
+
+# ╔═╡ b913201b-3980-4922-bbe3-8aa8e1fc633c
+LocalResource("images/memory.png")  # source: "The Elements of Differentiable Programming"
+
+# ╔═╡ 002cc839-dc2c-454f-8a22-e62ced9f6d54
+md"""
+### Gradients
+"""
+
+# ╔═╡ ec7ac2ae-26f5-4b72-be84-a6c9dc1be613
+md"""
+The gradient of a vector-to-scalar function is a VJP applied to the output sensitivity $v = [1]$ (efficient in reverse mode)
+
+!!! tip "Baur-Strassen theorem"
+	Gradient computation is fast, so machine learning is possible
+"""
+
+# ╔═╡ 05a2f30f-a9c9-49dd-80e3-9d18a1835e97
+md"""
+# More complex operators
+"""
+
+# ╔═╡ 0a53e623-8c15-44f0-947a-76438e7ef5b7
+md"""
+## Second order
+"""
+
+# ╔═╡ 219c9de4-0c7a-4cbe-8b74-25e7668487fa
+md"""
+> [How to compute Hessian-vector products?](https://iclr-blogposts.github.io/2024/blog/bench-hvp/), Dagréou et al. (2024)
+"""
+
+# ╔═╡ e0140759-c2ef-49b3-b93d-f8ef6b8aca65
+md"""
+A Hessian-vector product (HVP) can be computed by combining forward and reverse mode:
+```math
+\nabla^2 f(x)[u] = (\partial(\nabla f))(x)[u] 
+```
+In forward-over-reverse mode AD, the complexity of an HVP is proportional to the complexity of one call to $f$.
+
+Sufficient to compute the Hessian entirely, or to solve linear systems $Hu = b$ with iterative methods (like conjugate gradient)
+"""
+
+# ╔═╡ e7f0fa32-449d-44e5-b985-b1e5a57f7cf7
+md"""
+## Sparsity
+"""
+
+# ╔═╡ a5f8cb54-e62e-4220-8da9-f16d01ebfc6d
+md"""
+> [What Color Is Your Jacobian? Graph Coloring for Computing Derivatives](https://epubs.siam.org/doi/abs/10.1137/S0036144504444711), Gebremedhin et al. (2005)
+"""
+
+# ╔═╡ 6db8d4c1-1699-495e-bee3-f7b66012a7ad
+md"""
+Real-life Jacobians and Hessians are often sparse.
+
+Can this information speed up computation?
+"""
+
+# ╔═╡ 9700380c-ede9-4d26-ba01-b15bcf7ba070
+md"""
+### Compressed column evaluation
+"""
+
+# ╔═╡ 0a25735f-0f0f-4829-b944-0459ec3706ee
+md"""
+Jacobian in forward mode has complexity $O(n_\text{in})$: each column $J_j$ obtained as $\texttt{jvp}(e_j)$.
+
+In the sparse case, it makes sense to evaluate several columns at once:
+```math
+J_{j_1} + ... + J_{k_k} = \texttt{jvp}(e_{j_1} + \dots + e{j_k})
+```
+If the nonzero patterns of the columns are orthogonal, decompression is unambiguous.
+"""
+
+# ╔═╡ 1d62bfe7-c43c-4e3c-b4a8-59cf2016209f
+LocalResource("images/compressed_jacobian.png")  # source: "What color is your Jacobian?"
+
+# ╔═╡ e8f7f7b5-f24c-452a-af68-48efcb1e9e97
+md"""
+### Bipartite graph coloring
+"""
+
+# ╔═╡ 8e4a6323-aba4-46f5-80ef-4db54c58d912
+md"""
+How to find subsets of mutually orthogonal columns from the sparsity pattern $S$?
+
+1. Build a bipartite graph $G = (R \cup C, E)$ representing $S$:
+    - the vertices are the rows $R$ and the columns $C$
+    - the edges are $(r, c) \in E \iff S_{rc} = 1$
+2. Compute a minimum distance-2 coloring of $C$
+    - no two columns that are connected to the same row can share the same color
+
+The number of JVPs needed is the number of colors.
+"""
+
+# ╔═╡ 2d904477-65e1-4c2d-9f15-3d7dbc46bd6d
+LocalResource("images/partition.png")  # source: "What color is your Jacobian?"
+
+# ╔═╡ 06889bec-a7e6-4075-8636-dc89c249ecaf
+md"""
+### Sparsity pattern detection
+"""
+
+# ╔═╡ f3c6296f-5b7c-43d6-9f91-af0b193477b9
+md"""
+In some cases, the sparsity pattern is known ahead of time. Otherwise, can we detect it?
+
+Yes, using operator overloading once again (see [SparseConnectivityTracer.jl](https://github.com/adrhill/SparseConnectivityTracer.jl)).
+
+50x [speedup](https://github.com/adrhill/SparseConnectivityTracer.jl/pull/4) over previous Julia solution, does not even exist in [JAX](https://github.com/google/jax/issues/1032) or PyTorch
+"""
+
+# ╔═╡ ab231166-e6b5-42a7-9165-534adb03af5d
+struct Tracer
+	indices::Set{Int}
+end
+
+# ╔═╡ 320796bb-14f3-441a-afd0-59f9f78f7776
+Base.:*(x1::Tracer, x2::Tracer) = Tracer(x1.indices ∪ x2.indices)
+
 # ╔═╡ 29890b70-84a1-4f2f-b572-ab21d231d236
 Base.:/(x1::Dual, x2::Dual) = Dual(
 	x1.val / x2.val,
@@ -311,6 +547,9 @@ end
 # ╔═╡ 683a683c-939b-4060-a14d-a592e1e7266d
 @time ForwardDiff.derivative(Base.Fix2(myalgo, L_slider2), x0)
 
+# ╔═╡ 6a5d0cc7-483f-460e-bc07-69c19430a3ac
+dual_der(myalgo, x0)
+
 # ╔═╡ a06be073-9d10-4480-8d26-26cda704fa46
 finitediff_der(f, x0; h) = (f(x0 + h) - f(x0)) / h
 
@@ -319,21 +558,6 @@ finitediff_central_der(f, x0; h) = (f(x0 + h) - f(x0 - h)) / 2h
 
 # ╔═╡ 70201672-dacf-4787-a33c-6756a3b6ee57
 finitediff_complex_der(f, x0; h) = imag(f(x0 + h * im) - f(x0)) / h
-
-# ╔═╡ fff97e3c-7b45-4821-aa44-cab7138bf06e
-let
-	fig = Figure()
-	ax = Axis(fig[1, 1], xlabel="step size", ylabel="error", xscale=log10, yscale=log10)
-	hs = 10.0 .^ (-15:0.2:0)
-	finitediff_errs = map(h -> abs(finitediff_der(myalgo, x0; h) - inv(2 * sqrt(x0))), hs)
-	finitediff_central_errs = map(h -> abs(finitediff_central_der(myalgo, x0; h) - inv(2 * sqrt(x0))), hs)
-	finitediff_complex_errs = map(h -> abs(finitediff_complex_der(myalgo, x0; h) - inv(2 * sqrt(x0))), hs)
-	l1 = scatterlines!(ax, hs, max.(eps(), finitediff_errs), color=:red)
-	l2 = scatterlines!(ax, hs, max.(eps(), finitediff_central_errs), color=:blue)
-	l3 = scatterlines!(ax, hs, max.(eps(), finitediff_complex_errs), color=:green)
-	Legend(fig[1,2], [l1, l2, l3], ["forward finite diff\n(real step)", "central finite diff\n(real step)", "forward finite diff\n(complex step)"])
-	fig
-end
 
 # ╔═╡ c52d621d-9e5f-4e29-8d8c-b0a8de84d2fb
 let
@@ -352,113 +576,23 @@ let
 	fig
 end
 
-# ╔═╡ b335cff4-54b6-4a10-bc75-cbb438ef5a64
-dual_der(f, x0) = f(Dual(x0, one(x0))).der
+# ╔═╡ 5a4c9192-5c42-46fb-9384-f71b1dd4760a
+prod_first_last(x) = x[begin] * x[end]
 
-# ╔═╡ 6a5d0cc7-483f-460e-bc07-69c19430a3ac
-dual_der(myalgo, x0)
-
-# ╔═╡ 5a2f938e-604f-48c9-87e4-3e0a6ce8e974
-md"""
-## Vector-Jacobian product (VJP)
-"""
-
-# ╔═╡ 3685e527-d812-40b1-aa0e-e608818efac9
-md"""
-An output sensitivity $v \in \mathbb{R}^{n_\text{out}}$ can be propagated in the reverse direction ($L$ to $1$, right to left):
-```math
-v^\top J = (((v^\top J_L)J_{L-1}) \dots J_2)J_1
-```
-All we need is a VJP operator $v \mapsto v^\top J_\ell$ for each layer $f_\ell$.
-
-In reverse mode AD, the complexity of a VJP is proportional to the complexity of one call to $f$.
-"""
-
-# ╔═╡ 63eeecbc-2e65-4993-ba61-7cd97bfd31eb
-LocalResource("images/reverse.png")
-
-# ╔═╡ b851c800-0435-4d0f-a6dd-f49db8405293
-md"""
-## Reverse mode implementation
-"""
-
-# ╔═╡ d57af4b9-fef0-4ca5-8c9e-c0c160f718c4
-md"""
-Much more complicated than forward mode due to memory requirements:
-
-1. Run a forward sweep and record everything that happened on a tape
-2. Run a reverse sweep to compute the VJP
-"""
-
-# ╔═╡ b913201b-3980-4922-bbe3-8aa8e1fc633c
-LocalResource("images/memory.png")
-
-# ╔═╡ 002cc839-dc2c-454f-8a22-e62ced9f6d54
-md"""
-## Derivatives and gradients
-"""
-
-# ╔═╡ ec7ac2ae-26f5-4b72-be84-a6c9dc1be613
-md"""
-- The derivative of a scalar-to-vector function is a JVP applied to the input perturbation $u = [1]$ (efficient in forward mode)
-- The gradient of a vector-to-scalar function is a VJP applied to the output sensitivity $v = [1]$ (efficient in reverse mode)
-
-!!! tip "Baur-Strassen theorem"
-	Gradient computation is fast, so machine learning is possible
-"""
-
-# ╔═╡ 5e9bf404-d276-486a-bad1-07318b7478d2
-md"""
-## Jacobians
-The Jacobian of a vector-to-vector function can be obtained
-  - in forward mode: from $n_\text{in}$ JVPs, one per input basis vector $e_j$ (computed column by column)
-  - in reverse mode: from $n_\text{out}$ VJPs, one per output basis vector $e_i$ (computed row by row)
-"""
-
-# ╔═╡ 0a53e623-8c15-44f0-947a-76438e7ef5b7
-md"""
-## Second order
-"""
-
-# ╔═╡ e0140759-c2ef-49b3-b93d-f8ef6b8aca65
-md"""
-A Hessian-vector product (HVP) can be computed by combining forward and reverse mode:
-```math
-\nabla^2 f(x)[u] = (\partial(\nabla f))(x)[u] 
-```
-In forward-over-reverse mode AD, the complexity of an HVP is proportional to the complexity of one call to $f$.
-
-Sufficient to compute the Hessian entirely, or to solve linear systems $Hu = b$ with iterative methods (like conjugate gradient)
-"""
-
-# ╔═╡ e7f0fa32-449d-44e5-b985-b1e5a57f7cf7
-md"""
-# Sparsity and coloring
-"""
-
-# ╔═╡ ab0a875d-e374-41d6-ae1d-1452b794963e
-md"""
-> [What Color Is Your Jacobian? Graph Coloring for Computing Derivatives](https://epubs.siam.org/doi/abs/10.1137/S0036144504444711), Gebremedhin et al. (2005)
-"""
-
-# ╔═╡ 9700380c-ede9-4d26-ba01-b15bcf7ba070
-md"""
-## Compressed column evaluation
-"""
-
-# ╔═╡ e8f7f7b5-f24c-452a-af68-48efcb1e9e97
-md"""
-## Bipartite graph coloring
-"""
-
-# ╔═╡ 06889bec-a7e6-4075-8636-dc89c249ecaf
-md"""
-## Sparsity pattern detection
-"""
+# ╔═╡ edcbf517-5d92-4152-9fc2-c6f3f864ad55
+let
+	x = [Tracer(Set(1)), Tracer(Set(2)), Tracer(Set(3))]
+	y = prod_first_last(x)
+end
 
 # ╔═╡ 289c8a07-c29b-4ac9-8bbc-56f806fdf988
 md"""
-# Is everything differentiable?
+# Limits and workarounds
+"""
+
+# ╔═╡ 5106f29b-2b58-41b7-9e90-9dbd09cfcff8
+md"""
+Exact and approximate algorithms for differentiating through funky stuff.
 """
 
 # ╔═╡ b665de9e-07a7-4d6c-bac6-707d3d90b9ef
@@ -468,24 +602,47 @@ md"""
 
 # ╔═╡ 27f93503-b82f-45a0-834d-7004b21282b7
 md"""
+> [OptNet: Differentiable Optimization as a Layer in Neural Networks](https://proceedings.mlr.press/v70/amos17a.html), Amos and Kolter (2017)
+>
 > [Efficient and modular implicit differentiation](https://proceedings.neurips.cc/paper_files/paper/2022/hash/228b9279ecf9bbafe582406850c57115-Abstract-Conference.html), Blondel et al. (2022)
+"""
+
+# ╔═╡ aeaaa6aa-cd58-410d-8ef2-4b36c3ae28ee
+md"""
+### Differentiate through a max
 """
 
 # ╔═╡ a6a9fea0-adfa-41e0-8f27-37e53f51ea65
 md"""
-### Differentiate through a max
+```math
+m^\star(x) = \max_y f(x, y)
+```
 
-Exchange $\nabla$ and $\max$ using:
+Exchange $\nabla$ and $\max$ using convexity and Danskin's / Rockafellar's theorem
 
-- Danskin's theorem
-- Rockafellar's theorem
+```math
+\nabla m^\star(x) = \nabla_2 f(x, y^\star(x)) \quad \text{with} \quad y^\star(x) = \arg \max_y f(x, y)
+```
+"""
+
+# ╔═╡ 8b1ae57b-acc9-4d32-9e19-93b2049a9cf7
+md"""
+### Differentiate through an argmax
 """
 
 # ╔═╡ d8d4cc2a-1fcd-4c59-82f7-d72c2db02596
 md"""
-### Differentiate through an argmax
+```math
+	y^\star(x) = \arg \max_y f(x, y)
+```
+Use the implicit function theorem with the optimality conditions $c(x, y^\star(x)) = 0$, then solve a linear system:
+```math
+	\underbrace{\partial_1 c(x, y^\star(x))}_{-B} + \underbrace{\partial_2 c(x, y^\star(x))}_A \cdot \underbrace{\partial y^\star(x)}_J = 0
+```
+What kind of optimality conditions?
 
-Use the implicit function theorem
+- Unconstrained: gradient is zero
+- Constrained: KKT, projected gradient
 """
 
 # ╔═╡ f2ff2731-77ca-456e-b5ca-74f2d4ea74aa
@@ -498,9 +655,16 @@ md"""
 > [Monte Carlo Gradient Estimation in Machine Learning ](https://www.jmlr.org/papers/v21/19-346.html), Mohamed et al. (2020)
 """
 
+# ╔═╡ d4799108-9061-45af-b238-6a0a945082f8
+md"""
+```math
+F(x) = \mathbb{E}_{p_x}[Y] = \int_y y \, p_x(y) \, \mathrm{d}y
+```
+"""
+
 # ╔═╡ 4821a3a6-8178-4d1d-bf2e-d9f45ced4715
 md"""
-### REINFORCE
+### REINFORCE / score function
 """
 
 # ╔═╡ 616fe6e8-e4b8-48fb-ae3c-65c2b28106de
@@ -508,14 +672,19 @@ md"""
 ### Reparametrization
 """
 
+# ╔═╡ b01724db-42fd-4ebb-9d67-74d7a19bf36c
+md"""
+## Discrete algorithms
+"""
+
 # ╔═╡ 4b4d5e05-22ec-4093-9dfd-b5cc7191540a
 md"""
-## Control flow
+### Control flow
 """
 
 # ╔═╡ 0b520f07-8b7a-443f-9044-6dd727701c42
 md"""
-## Combinatorial algorithms
+### Combinatorial solvers
 """
 
 # ╔═╡ d49a9db0-2154-4a3e-8359-195830286324
@@ -533,38 +702,9 @@ md"""
 > [Gradient Estimation Using Stochastic Computation Graphs](https://proceedings.neurips.cc/paper_files/paper/2015/hash/de03beffeed9da5f3639a621bcab5dd4-Abstract.html), Schulman et al. (2015)
 """
 
-# ╔═╡ 5dda51ca-cf43-4ff5-931c-258ed1268a4e
-md"""
-# Implementations
-"""
-
-# ╔═╡ acbd09a5-d2c6-4c06-b4f0-911d6095f18f
-md"""
-## Python
-"""
-
-# ╔═╡ 61d3efb7-39e8-4c4b-ad8b-fd3920e8457c
-md"""
-- [JAX](https://github.com/google/jax)
-- [PyTorch](https://github.com/pytorch/pytorch)
-- [TensorFlow](https://github.com/tensorflow)
-"""
-
-# ╔═╡ 5198f895-9bf4-4f5c-ad56-109f856f4f06
-md"""
-## Julia
-"""
-
-# ╔═╡ 07cb8a3f-2627-47ad-bccc-abf06b994787
-md"""
-Many different options, see [juliadiff.org](https://juliadiff.org/) for a list
-
-Unification attempt: [DifferentiationInterface.jl](https://github.com/gdalle/DifferentiationInterface.jl)
-"""
-
 # ╔═╡ f6f4191f-faf6-407c-9c65-b5fd24547296
 md"""
-## LLVM
+## Link with compilation
 """
 
 # ╔═╡ 77063fdb-c980-4f09-b34f-f64b79ac6782
@@ -573,13 +713,10 @@ md"""
 """
 
 # ╔═╡ c24656e1-b5df-4eb0-b5e9-a28d50ea3bb1
-LocalResource("images/enzyme_diff_opt.png")
+LocalResource("images/enzyme_diff_opt.png")  # source: https://indico.cern.ch/event/1145124/contributions/4994088/attachments/2508821/4311554/enzyme-mode.pdf
 
 # ╔═╡ cccd79cf-60f4-4617-8437-ab1ec5c60ca3
-LocalResource("images/enzyme_opt_diff.png")  
-
-# ╔═╡ 1b9ed265-bd40-48f9-a0f8-0b270832a1fb
-# source: https://indico.cern.ch/event/1145124/contributions/4994088/attachments/2508821/4311554/enzyme-mode.pdf
+LocalResource("images/enzyme_opt_diff.png")  # source: https://indico.cern.ch/event/1145124/contributions/4994088/attachments/2508821/4311554/enzyme-mode.pdf
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -589,6 +726,7 @@ ForwardDiff = "f6369f11-7733-5829-9624-2563aa707210"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 PlutoTeachingTools = "661c6b06-c737-4d37-b85c-46df65de6f69"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
+SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 Symbolics = "0c5d862f-8b57-4792-8d23-62f2024744c7"
 Zygote = "e88e6eb3-aa80-5325-afca-941959d7151f"
 
@@ -607,7 +745,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.10.2"
 manifest_format = "2.0"
-project_hash = "372593fcdaa93caeaa4203fa63fe8b18feaede55"
+project_hash = "f30b366c3a6d672b079b2a9de465b515b8abc0b7"
 
 [[deps.ADTypes]]
 git-tree-sha1 = "fcdb00b4d412b80ab08e39978e3bdef579e5e224"
@@ -2604,17 +2742,23 @@ version = "3.5.0+0"
 """
 
 # ╔═╡ Cell order:
-# ╠═028bee0c-00d6-11ef-2159-99ffeebdeba2
-# ╠═cbf0a7eb-0750-4537-b925-efd743360979
 # ╟─2fe59b4a-3bd4-4466-83ff-aa97a887b1b3
 # ╟─fe638244-3f35-4de4-a52e-aa6ef8b662ef
+# ╟─d98a6acc-8cb9-4ec3-beb2-c12655f0bd72
 # ╟─824423d7-21b0-4b48-9200-22d213207fe0
+# ╠═028bee0c-00d6-11ef-2159-99ffeebdeba2
+# ╠═cbf0a7eb-0750-4537-b925-efd743360979
 # ╟─603d7e48-3def-44f8-882e-74e3f22293c0
 # ╟─317749dd-fd49-488b-ad0d-9d30b33d9891
 # ╟─7b023270-9b2d-4d69-93dc-921e37fcf423
 # ╠═ff41d45f-12d8-41de-bf19-e290a0590098
 # ╟─7b64bd44-f261-49b6-8520-ec09135305d3
 # ╟─52de1ea5-e8f0-4efb-a752-fdddf29ff462
+# ╟─5dda51ca-cf43-4ff5-931c-258ed1268a4e
+# ╟─acbd09a5-d2c6-4c06-b4f0-911d6095f18f
+# ╟─61d3efb7-39e8-4c4b-ad8b-fd3920e8457c
+# ╟─5198f895-9bf4-4f5c-ad56-109f856f4f06
+# ╟─07cb8a3f-2627-47ad-bccc-abf06b994787
 # ╟─ebf1147e-4469-4b22-99d2-003c3d597890
 # ╟─a2030c95-7ed4-4690-9a22-3935f7f7ab47
 # ╟─1298e858-8586-4589-b853-c7165a5326ed
@@ -2634,18 +2778,21 @@ version = "3.5.0+0"
 # ╠═a06be073-9d10-4480-8d26-26cda704fa46
 # ╠═7e069828-7c66-4415-aa46-d4bc49629cfc
 # ╠═70201672-dacf-4787-a33c-6756a3b6ee57
-# ╟─fff97e3c-7b45-4821-aa44-cab7138bf06e
+# ╟─c52d621d-9e5f-4e29-8d8c-b0a8de84d2fb
 # ╟─a383b9ea-3ace-470a-874c-a5f32fcaa29b
 # ╟─42330b47-7a36-4f83-afb7-54139dacbbf2
 # ╟─50e1e9f5-b263-4a35-b5a1-5b6bcdf2ddad
 # ╟─de1424c4-ebac-4155-b6d2-489c9724245f
 # ╠═683a683c-939b-4060-a14d-a592e1e7266d
-# ╟─f0525c55-e1c4-4a11-90d1-1da7f3e4e4bd
-# ╟─c52d621d-9e5f-4e29-8d8c-b0a8de84d2fb
 # ╟─fb66a558-d4fe-41bc-a146-e71da8574f4f
+# ╟─fb641d47-2377-4d48-8723-8026f9ab8702
+# ╟─201f3e38-37d2-4d7b-9e22-62f2ae7916a0
 # ╟─2365e621-11a1-4945-b7c6-b82e09cf2400
 # ╟─10f7588c-7bc3-4b83-a191-def09a937edd
 # ╟─eee51fe7-10c0-45ed-b2bf-35a4e10bb624
+# ╟─5e9bf404-d276-486a-bad1-07318b7478d2
+# ╟─097a0c8a-1404-4c85-ae92-1b67b9c13d4e
+# ╟─06dc252d-2e83-4af5-a215-258b6709f9cf
 # ╟─7d09d62e-8e97-4891-8628-e7a64b0b4dda
 # ╟─f89d60cd-c59d-40c2-8531-d900f92c42d8
 # ╠═b8f2c1bf-fb99-457a-aac1-479b9c583351
@@ -2659,6 +2806,9 @@ version = "3.5.0+0"
 # ╠═29890b70-84a1-4f2f-b572-ab21d231d236
 # ╠═b335cff4-54b6-4a10-bc75-cbb438ef5a64
 # ╠═6a5d0cc7-483f-460e-bc07-69c19430a3ac
+# ╟─dbe28614-186f-4a27-a36c-c94cfdfbc21a
+# ╟─1c5ab740-dfb9-4ae4-94f2-6292202af7c8
+# ╟─c96b3724-3c14-44fe-ab4d-aff5a0a29aa4
 # ╟─5a2f938e-604f-48c9-87e4-3e0a6ce8e974
 # ╟─3685e527-d812-40b1-aa0e-e608818efac9
 # ╠═63eeecbc-2e65-4993-ba61-7cd97bfd31eb
@@ -2667,37 +2817,47 @@ version = "3.5.0+0"
 # ╠═b913201b-3980-4922-bbe3-8aa8e1fc633c
 # ╟─002cc839-dc2c-454f-8a22-e62ced9f6d54
 # ╟─ec7ac2ae-26f5-4b72-be84-a6c9dc1be613
-# ╟─5e9bf404-d276-486a-bad1-07318b7478d2
+# ╟─05a2f30f-a9c9-49dd-80e3-9d18a1835e97
 # ╟─0a53e623-8c15-44f0-947a-76438e7ef5b7
+# ╟─219c9de4-0c7a-4cbe-8b74-25e7668487fa
 # ╟─e0140759-c2ef-49b3-b93d-f8ef6b8aca65
 # ╟─e7f0fa32-449d-44e5-b985-b1e5a57f7cf7
-# ╟─ab0a875d-e374-41d6-ae1d-1452b794963e
+# ╟─a5f8cb54-e62e-4220-8da9-f16d01ebfc6d
+# ╟─6db8d4c1-1699-495e-bee3-f7b66012a7ad
 # ╟─9700380c-ede9-4d26-ba01-b15bcf7ba070
+# ╟─0a25735f-0f0f-4829-b944-0459ec3706ee
+# ╠═1d62bfe7-c43c-4e3c-b4a8-59cf2016209f
 # ╟─e8f7f7b5-f24c-452a-af68-48efcb1e9e97
+# ╟─8e4a6323-aba4-46f5-80ef-4db54c58d912
+# ╠═2d904477-65e1-4c2d-9f15-3d7dbc46bd6d
 # ╟─06889bec-a7e6-4075-8636-dc89c249ecaf
+# ╟─f3c6296f-5b7c-43d6-9f91-af0b193477b9
+# ╠═ab231166-e6b5-42a7-9165-534adb03af5d
+# ╠═320796bb-14f3-441a-afd0-59f9f78f7776
+# ╠═5a4c9192-5c42-46fb-9384-f71b1dd4760a
+# ╠═edcbf517-5d92-4152-9fc2-c6f3f864ad55
 # ╟─289c8a07-c29b-4ac9-8bbc-56f806fdf988
+# ╟─5106f29b-2b58-41b7-9e90-9dbd09cfcff8
 # ╟─b665de9e-07a7-4d6c-bac6-707d3d90b9ef
 # ╟─27f93503-b82f-45a0-834d-7004b21282b7
+# ╟─aeaaa6aa-cd58-410d-8ef2-4b36c3ae28ee
 # ╟─a6a9fea0-adfa-41e0-8f27-37e53f51ea65
+# ╟─8b1ae57b-acc9-4d32-9e19-93b2049a9cf7
 # ╟─d8d4cc2a-1fcd-4c59-82f7-d72c2db02596
 # ╟─f2ff2731-77ca-456e-b5ca-74f2d4ea74aa
 # ╟─2684079a-ea96-4c55-b565-390a0b6d2de0
+# ╟─d4799108-9061-45af-b238-6a0a945082f8
 # ╟─4821a3a6-8178-4d1d-bf2e-d9f45ced4715
 # ╟─616fe6e8-e4b8-48fb-ae3c-65c2b28106de
+# ╟─b01724db-42fd-4ebb-9d67-74d7a19bf36c
 # ╟─4b4d5e05-22ec-4093-9dfd-b5cc7191540a
 # ╟─0b520f07-8b7a-443f-9044-6dd727701c42
 # ╟─d49a9db0-2154-4a3e-8359-195830286324
 # ╟─e964923b-870b-4b88-a22d-d81af6caf385
 # ╟─d3809b7f-c832-4109-a2f6-7878d73115ed
-# ╟─5dda51ca-cf43-4ff5-931c-258ed1268a4e
-# ╟─acbd09a5-d2c6-4c06-b4f0-911d6095f18f
-# ╟─61d3efb7-39e8-4c4b-ad8b-fd3920e8457c
-# ╟─5198f895-9bf4-4f5c-ad56-109f856f4f06
-# ╟─07cb8a3f-2627-47ad-bccc-abf06b994787
 # ╟─f6f4191f-faf6-407c-9c65-b5fd24547296
 # ╟─77063fdb-c980-4f09-b34f-f64b79ac6782
 # ╠═c24656e1-b5df-4eb0-b5e9-a28d50ea3bb1
 # ╠═cccd79cf-60f4-4617-8437-ab1ec5c60ca3
-# ╠═1b9ed265-bd40-48f9-a0f8-0b270832a1fb
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
