@@ -799,7 +799,7 @@ md"""
 md"""
 An integer linear program is a piecewise-constant mapping from objective to solution:
 ```math
-y^\star(x) = \arg \max_{y \in \mathbb{Z}} x^\top y \quad \text{s.t.} \quad Ax \leq b
+y^\star(x) = \arg \max_{y \in \mathbb{Z}} x^\top y \quad \text{s.t.} \quad Ay \leq b
 ```
 Its derivatives contain no information, but we may want to use it within a deep learning pipeline.
 """
@@ -813,7 +813,7 @@ md"""
 md"""
 Apply implicit differentiation to a convex regularized version of the problem:
 ```math
-\widehat{y^\star_R}(x) = \arg \max_{y \in \mathbb{R}} (x^\top y - R(y)) \quad \text{s.t.} \quad Ax \leq b
+\widehat{y^\star_R}(x) = \arg \max_{y \in \mathbb{R}} (x^\top y - R(y)) \quad \text{s.t.} \quad Ay \leq b
 ```
 """
 
@@ -826,7 +826,7 @@ md"""
 md"""
 Apply REINFORCE to a randomly perturbed version of the problem:
 ```math
-\widehat{y^\star_\varepsilon}(x) = \mathbb{E}\left[\arg \max_{y \in \mathbb{Z}} (x + \varepsilon Z)^\top y \quad \text{s.t.} \quad Ax \leq b\right] \quad \text{where} \quad Z \sim \mathcal{N}(0, \varepsilon^2)
+\widehat{y^\star_\varepsilon}(x) = \mathbb{E}\left[\arg \max_{y \in \mathbb{Z}} (x + \varepsilon Z)^\top y \quad \text{s.t.} \quad Ay \leq b\right] \quad \text{where} \quad Z \sim \mathcal{N}(0, \varepsilon^2)
 ```
 """
 
