@@ -217,7 +217,7 @@ Faster than symbolic, more precise than numerical
 
 # ╔═╡ de1424c4-ebac-4155-b6d2-489c9724245f
 md"""
- $L =$ $(@bind L_slider2 PlutoUI.Slider(0:100:10^4; show_value=true))
+ $L =$ $(@bind L_slider2 PlutoUI.Slider(0:500:10^4; show_value=true))
 """
 
 # ╔═╡ fb66a558-d4fe-41bc-a146-e71da8574f4f
@@ -569,17 +569,29 @@ let
 	fig = Figure()
 	ax = Axis(fig[1, 1], xlabel="step size", ylabel="error", xscale=log10, yscale=log10)
 	hs = 10.0 .^ (-15:0.2:0)
-	finitediff_errs = map(h -> abs(finitediff_der(myalgo, x0; h) - inv(2 * sqrt(x0))), hs)
-	finitediff_central_errs = map(h -> abs(finitediff_central_der(myalgo, x0; h) - inv(2 * sqrt(x0))), hs)
-	finitediff_complex_errs = map(h -> abs(finitediff_complex_der(myalgo, x0; h) - inv(2 * sqrt(x0))), hs)
+	finitediff_errs = map(
+		h -> abs(finitediff_der(myalgo, x0; h) - inv(2 * sqrt(x0))), hs
+	)
+	finitediff_central_errs = map(
+		h -> abs(finitediff_central_der(myalgo, x0; h) - inv(2 * sqrt(x0))), hs
+	)
+	finitediff_complex_errs = map(
+		h -> abs(finitediff_complex_der(myalgo, x0; h) - inv(2 * sqrt(x0))), hs
+	)
 	forwarddiff_err = abs(ForwardDiff.derivative(myalgo, x0) - inv(2 * sqrt(x0)))
 	l1 = scatterlines!(ax, hs, max.(eps(), finitediff_errs), color=:red)
 	l2 = scatterlines!(ax, hs, max.(eps(), finitediff_central_errs), color=:blue)
 	l3 = scatterlines!(ax, hs, max.(eps(), finitediff_complex_errs), color=:green)
 	l4 = hlines!(ax, [max(eps(), forwarddiff_err)], color=:black, linewidth=3)
-	Legend(fig[1,2], [l1, l2, l3, l4], ["forward finite diff\n(real step)", "central finite diff\n(real step)", "forward finite diff\n(complex step)", "algorithmic"])
+	Legend(
+		fig[1,2], [l1, l2, l3, l4],
+		["forward finite diff\n(real step)", "central finite diff\n(real step)", "forward finite diff\n(complex step)", "algorithmic"]
+	)
 	fig
 end
+
+# ╔═╡ 8160588c-5ace-4c43-b2d4-043e8173944e
+inv(2 * sqrt(x0))
 
 # ╔═╡ 5a4c9192-5c42-46fb-9384-f71b1dd4760a
 prod_first_last(x) = x[begin] * x[end]
@@ -840,11 +852,32 @@ md"""
 [Enzyme](https://github.com/EnzymeAD/enzyme): lower, optimize and then differentiate
 """
 
+# ╔═╡ 3302c1da-30d6-4485-ac6d-16a48d10450c
+md"""
+The following slides are borrowed to William S. Moses
+
+<https://indico.cern.ch/event/1145124/contributions/4994088/attachments/2508821/4311554/enzyme-mode.pdf>
+"""
+
+# ╔═╡ 04591e34-049c-484b-a018-35fc25556292
+TwoColumn(
+	LocalResource("images/compiler_preopt.png"),
+	LocalResource("images/compiler_postopt.png"),
+)
+
+# ╔═╡ 37e08d2e-40e7-4780-b29c-4a600788f839
+LocalResource("images/compiler_preopt_vs_postopt.png")
+
 # ╔═╡ c24656e1-b5df-4eb0-b5e9-a28d50ea3bb1
-LocalResource("images/enzyme_diff_opt.png")  # source: https://indico.cern.ch/event/1145124/contributions/4994088/attachments/2508821/4311554/enzyme-mode.pdf
+LocalResource("images/enzyme_diff_opt.png")
 
 # ╔═╡ cccd79cf-60f4-4617-8437-ab1ec5c60ca3
-LocalResource("images/enzyme_opt_diff.png")  # source: https://indico.cern.ch/event/1145124/contributions/4994088/attachments/2508821/4311554/enzyme-mode.pdf
+LocalResource("images/enzyme_opt_diff.png")
+
+# ╔═╡ f9df653b-3b72-4d9b-9e4d-462d08043de0
+md"""
+# Questions?
+"""
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -2907,7 +2940,7 @@ version = "3.5.0+0"
 # ╠═a06be073-9d10-4480-8d26-26cda704fa46
 # ╠═7e069828-7c66-4415-aa46-d4bc49629cfc
 # ╠═70201672-dacf-4787-a33c-6756a3b6ee57
-# ╟─c52d621d-9e5f-4e29-8d8c-b0a8de84d2fb
+# ╠═c52d621d-9e5f-4e29-8d8c-b0a8de84d2fb
 # ╟─a383b9ea-3ace-470a-874c-a5f32fcaa29b
 # ╟─42330b47-7a36-4f83-afb7-54139dacbbf2
 # ╟─50e1e9f5-b263-4a35-b5a1-5b6bcdf2ddad
@@ -2935,6 +2968,7 @@ version = "3.5.0+0"
 # ╠═29890b70-84a1-4f2f-b572-ab21d231d236
 # ╠═b335cff4-54b6-4a10-bc75-cbb438ef5a64
 # ╠═6a5d0cc7-483f-460e-bc07-69c19430a3ac
+# ╠═8160588c-5ace-4c43-b2d4-043e8173944e
 # ╟─dbe28614-186f-4a27-a36c-c94cfdfbc21a
 # ╟─1c5ab740-dfb9-4ae4-94f2-6292202af7c8
 # ╟─c96b3724-3c14-44fe-ab4d-aff5a0a29aa4
@@ -2998,7 +3032,11 @@ version = "3.5.0+0"
 # ╟─7cb40b09-7dfc-4ab5-988e-f7d903c6d0d4
 # ╟─f6f4191f-faf6-407c-9c65-b5fd24547296
 # ╟─77063fdb-c980-4f09-b34f-f64b79ac6782
-# ╠═c24656e1-b5df-4eb0-b5e9-a28d50ea3bb1
-# ╠═cccd79cf-60f4-4617-8437-ab1ec5c60ca3
+# ╟─3302c1da-30d6-4485-ac6d-16a48d10450c
+# ╟─04591e34-049c-484b-a018-35fc25556292
+# ╟─37e08d2e-40e7-4780-b29c-4a600788f839
+# ╟─c24656e1-b5df-4eb0-b5e9-a28d50ea3bb1
+# ╟─cccd79cf-60f4-4617-8437-ab1ec5c60ca3
+# ╟─f9df653b-3b72-4d9b-9e4d-462d08043de0
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
