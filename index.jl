@@ -26,6 +26,9 @@ begin
 	import Zygote
 end
 
+# ╔═╡ cbf0a7eb-0750-4537-b925-efd743360979
+TableOfContents(depth=2)
+
 # ╔═╡ 2fe59b4a-3bd4-4466-83ff-aa97a887b1b3
 md"""
 # A primer on algorithmic differentiation
@@ -41,10 +44,7 @@ md"""
 """
 
 # ╔═╡ 824423d7-21b0-4b48-9200-22d213207fe0
-TwoColumn(present_button(), ChooseDisplayMode())
-
-# ╔═╡ cbf0a7eb-0750-4537-b925-efd743360979
-TableOfContents(depth=2)
+ChooseDisplayMode()
 
 # ╔═╡ 603d7e48-3def-44f8-882e-74e3f22293c0
 md"""
@@ -145,6 +145,9 @@ Here is a simple test function. What does it compute?
 
 # ╔═╡ 086435e8-2d8e-49a6-a2ec-505076f0d35b
 x0 = 2.0
+
+# ╔═╡ 129bffac-2676-453e-a8bb-404649005625
+sqrt(x0)
 
 # ╔═╡ bc8eda8e-3d2d-4939-9e3c-e0cb122fa7e8
 md"""
@@ -468,7 +471,7 @@ Jacobian in forward mode has complexity $O(n_\text{in})$: each column $J_j$ obta
 
 In the sparse case, it makes sense to evaluate several columns at once:
 ```math
-J_{j_1} + ... + J_{k_k} = \texttt{jvp}(e_{j_1} + \dots + e{j_k})
+J_{j_1} + ... + J_{j_k} = \texttt{jvp}(e_{j_1} + \dots + e_{j_k})
 ```
 If the nonzero patterns of the columns are orthogonal, decompression is unambiguous.
 """
@@ -535,7 +538,7 @@ function myalgo(x, L::Integer=10)
 end
 
 # ╔═╡ 8f14ceb9-37fa-4afb-bbad-8d2c25e978db
-myalgo(x0)
+myalgo(x0, 10)
 
 # ╔═╡ 84da59f4-54a4-41ea-b0c6-26d40536a3bf
 let
@@ -643,7 +646,7 @@ m^\star(x) = \max_y g(x, y)
 Exchange $\nabla$ and $\max$ using Danskin's / Rockafellar's theorem
 
 ```math
-\nabla m^\star(x) = \nabla_2 g(x, y^\star(x)) \quad \text{with} \quad y^\star(x) = \arg \max_y g(x, y)
+\nabla m^\star(x) = \nabla_1 g(x, y^\star(x)) \quad \text{with} \quad y^\star(x) = \arg \max_y g(x, y)
 ```
 """
 
@@ -663,7 +666,7 @@ Use the implicit function theorem with the optimality conditions $c(x, y^\star(x
 ```
 What kind of optimality conditions?
 
-- Unconstrained: gradient is zero $c(x, y) = \nabla_2 g(x, y)$
+- Unconstrained: gradient is zero $c(x, y) = \nabla_2 g(x, y) = 0$
 - Constrained: KKT, projected gradient
 """
 
@@ -2903,12 +2906,12 @@ version = "3.5.0+0"
 """
 
 # ╔═╡ Cell order:
+# ╠═028bee0c-00d6-11ef-2159-99ffeebdeba2
+# ╠═cbf0a7eb-0750-4537-b925-efd743360979
 # ╟─2fe59b4a-3bd4-4466-83ff-aa97a887b1b3
 # ╟─fe638244-3f35-4de4-a52e-aa6ef8b662ef
 # ╟─d98a6acc-8cb9-4ec3-beb2-c12655f0bd72
 # ╟─824423d7-21b0-4b48-9200-22d213207fe0
-# ╠═028bee0c-00d6-11ef-2159-99ffeebdeba2
-# ╠═cbf0a7eb-0750-4537-b925-efd743360979
 # ╟─603d7e48-3def-44f8-882e-74e3f22293c0
 # ╟─fdb8ed44-74dd-4cdf-8d3d-c4d8bf467fc4
 # ╟─317749dd-fd49-488b-ad0d-9d30b33d9891
@@ -2928,6 +2931,7 @@ version = "3.5.0+0"
 # ╠═7a3110f3-ca56-4be6-a9a3-7547064b3a69
 # ╠═086435e8-2d8e-49a6-a2ec-505076f0d35b
 # ╠═8f14ceb9-37fa-4afb-bbad-8d2c25e978db
+# ╠═129bffac-2676-453e-a8bb-404649005625
 # ╟─bc8eda8e-3d2d-4939-9e3c-e0cb122fa7e8
 # ╟─a3c02f24-2eb6-4895-bfd5-e95a26ac44fe
 # ╟─4efaf69a-ecb3-47ad-9d00-60cd6e49d1b4
