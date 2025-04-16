@@ -921,10 +921,7 @@ The following [slides](https://indico.cern.ch/event/1145124/contributions/499408
 """
 
 # ╔═╡ c24656e1-b5df-4eb0-b5e9-a28d50ea3bb1
-LocalResource("images/enzyme_diff_opt.png")
-
-# ╔═╡ cccd79cf-60f4-4617-8437-ab1ec5c60ca3
-LocalResource("images/enzyme_opt_diff.png")
+TwoColumn(LocalResource("images/enzyme_diff_opt.png"), LocalResource("images/enzyme_opt_diff.png"))
 
 # ╔═╡ f9df653b-3b72-4d9b-9e4d-462d08043de0
 md"""
@@ -3660,7 +3657,6 @@ version = "3.6.0+0"
 # ╟─790491b1-c560-49e8-9635-3f201fba336f
 # ╟─3302c1da-30d6-4485-ac6d-16a48d10450c
 # ╟─c24656e1-b5df-4eb0-b5e9-a28d50ea3bb1
-# ╟─cccd79cf-60f4-4617-8437-ab1ec5c60ca3
 # ╟─f9df653b-3b72-4d9b-9e4d-462d08043de0
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
