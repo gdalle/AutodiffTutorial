@@ -1,5 +1,3 @@
 # AutodiffTutorial
 
-A tutorial on Automatic Differentiation
-
-> <https://gdalle.github.io/AutodiffTutorial/>
+Various version of a tutorial on Automatic Differentiation
